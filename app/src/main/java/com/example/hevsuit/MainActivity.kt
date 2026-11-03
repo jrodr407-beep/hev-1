@@ -48,25 +48,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // HEV Mark IV button
+        // Button 1
         findViewById<Button>(R.id.buttonMarkIV).setOnClickListener {
             playAudio(R.raw.hev_mark_iv)
             vibrate()
         }
 
-        // Minor Lacerations button
+        // Button 2
         findViewById<Button>(R.id.buttonLacerations).setOnClickListener {
             playAudio(R.raw.hev_minor_lacerations_detected)
             vibrate()
         }
 
-        // Major Fracture button
+        // Button 3
         findViewById<Button>(R.id.buttonFracture).setOnClickListener {
             playAudio(R.raw.major_fracture_detected)
             vibrate()
         }
 
-        // Death Imminent button
+        // Button 4
         findViewById<Button>(R.id.buttonDeathImminent).setOnClickListener {
             playAudio(R.raw.half_life_hev_user_death_imminent)
             vibrate()
