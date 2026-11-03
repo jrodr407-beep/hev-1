@@ -27,6 +27,10 @@ class MainActivity : AppCompatActivity() {
             getSystemService(VIBRATOR_SERVICE) as Vibrator
         }
 
+        // Play HEV Mark IV startup sound
+        playAudio(R.raw.hev_mark_iv)
+        vibrate()
+
         // Set up button click listeners
         setupButtons()
     }
