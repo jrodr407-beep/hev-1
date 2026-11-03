@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:scaleType="centerCrop"
-        android:src="@drawable/hev_suit"
+        android:src="@drawable/neon_orange_lambda_armor_blueprint"
         android:contentDescription="HEV Suit" />
 
     <!-- Right Panel: Buttons -->

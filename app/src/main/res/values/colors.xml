@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- HEV Suit Theme Colors -->
-    <color name="hev_green">#00FF00</color>
-    <color name="hev_green_dark">#00CC00</color>
-    <color name="hev_background">#001100</color>
+    <color name="hev_green">#FF6600</color>
+    <color name="hev_green_dark">#CC5200</color>
+    <color name="hev_background">#110600</color>
     <color name="hev_black">#000000</color>
-    <color name="hev_semi_transparent">#88001100</color>
-    <color name="hev_button_bg">#CC001100</color>
-    <color name="hev_button_border">#00FF00</color>
+    <color name="hev_semi_transparent">#88110600</color>
+    <color name="hev_button_bg">#CC110600</color>
+    <color name="hev_button_border">#FF6600</color>
     <color name="white">#FFFFFF</color>
 </resources>
