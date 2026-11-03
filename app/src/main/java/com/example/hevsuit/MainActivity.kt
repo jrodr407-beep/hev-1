@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -46,6 +48,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
+        // Toggle button
+        findViewById<Button>(R.id.toggleButton).setOnClickListener {
+            val buttonPanel = findViewById<LinearLayout>(R.id.buttonPanel)
+            if (buttonPanel.visibility == View.VISIBLE) {
+                buttonPanel.visibility = View.GONE
+            } else {
+                buttonPanel.visibility = View.VISIBLE
+            }
+            vibrate()
+        }
+
         // HEV Mark IV button
         findViewById<Button>(R.id.buttonMarkIV).setOnClickListener {
             playAudio(R.raw.hev_mark_iv)
