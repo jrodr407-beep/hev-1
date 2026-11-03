@@ -19,6 +19,7 @@
 
     <!-- Right Panel: Buttons -->
     <LinearLayout
+        android:id="@+id/buttonPanel"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -83,5 +84,12 @@
             android:typeface="monospace" />
 
     </LinearLayout>
+
+    <!-- Toggle Button (hidden in landscape) -->
+    <Button
+        android:id="@+id/toggleButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
 
 </LinearLayout>

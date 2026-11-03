@@ -48,15 +48,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
-        // Toggle button
-        findViewById<Button>(R.id.toggleButton).setOnClickListener {
-            val buttonPanel = findViewById<LinearLayout>(R.id.buttonPanel)
-            if (buttonPanel.visibility == View.VISIBLE) {
-                buttonPanel.visibility = View.GONE
-            } else {
-                buttonPanel.visibility = View.VISIBLE
+        // Toggle button (only in portrait mode)
+        val toggleButton = findViewById<Button>(R.id.toggleButton)
+        if (toggleButton.visibility != View.GONE) {
+            toggleButton.setOnClickListener {
+                val buttonPanel = findViewById<LinearLayout>(R.id.buttonPanel)
+                if (buttonPanel.visibility == View.VISIBLE) {
+                    buttonPanel.visibility = View.GONE
+                } else {
+                    buttonPanel.visibility = View.VISIBLE
+                }
+                vibrate()
             }
-            vibrate()
         }
 
         // HEV Mark IV button
