@@ -13,7 +13,7 @@
         android:theme="@style/Theme.HEVSuit"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".LoadingActivity"
             android:exported="true"
             android:screenOrientation="unspecified">
             <intent-filter>
@@ -21,6 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:screenOrientation="unspecified" />
     </application>
 
 </manifest>
