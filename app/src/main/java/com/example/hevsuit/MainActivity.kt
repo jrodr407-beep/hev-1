@@ -1,5 +1,7 @@
 package com.example.hevsuit
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -13,10 +15,14 @@ class MainActivity : AppCompatActivity() {
 
     private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
+    private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Initialize shared preferences
+        sharedPrefs = getSharedPreferences("HEVSuitPrefs", Context.MODE_PRIVATE)
 
         // Initialize vibrator
         vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -27,9 +33,13 @@ class MainActivity : AppCompatActivity() {
             getSystemService(VIBRATOR_SERVICE) as Vibrator
         }
 
-        // Play HEV Mark IV startup sound
-        playAudio(R.raw.hev_mark_iv)
-        vibrate()
+        // Play HEV Mark IV startup sound only on first app launch
+        val isFirstLaunch = sharedPrefs.getBoolean("is_first_launch", true)
+        if (isFirstLaunch) {
+            playAudio(R.raw.hev_mark_iv)
+            vibrate()
+            sharedPrefs.edit().putBoolean("is_first_launch", false).apply()
+        }
 
         // Set up button click listeners
         setupButtons()
