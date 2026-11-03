@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/hev_background"
+    android:orientation="horizontal"
+    tools:context=".MainActivity">
+
+    <!-- Left Panel: HEV Suit Image -->
+    <ImageView
+        android:id="@+id/hevSuitImage"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:scaleType="centerCrop"
+        android:src="@drawable/hev_suit"
+        android:contentDescription="HEV Suit" />
+
+    <!-- Right Panel: Buttons -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp">
+
+        <!-- Button 1: HEV Mark IV -->
+        <Button
+            android:id="@+id/buttonMarkIV"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/hev_button_bg"
+            android:padding="16dp"
+            android:text="HEV MARK IV"
+            android:textColor="@color/hev_green"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:typeface="monospace" />
+
+        <!-- Button 2: Minor Lacerations -->
+        <Button
+            android:id="@+id/buttonLacerations"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/hev_button_bg"
+            android:padding="16dp"
+            android:text="MINOR LACERATIONS"
+            android:textColor="@color/hev_green"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:typeface="monospace" />
+
+        <!-- Button 3: Major Fracture -->
+        <Button
+            android:id="@+id/buttonFracture"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/hev_button_bg"
+            android:padding="16dp"
+            android:text="MAJOR FRACTURE"
+            android:textColor="@color/hev_green"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:typeface="monospace" />
+
+        <!-- Button 4: Death Imminent -->
+        <Button
+            android:id="@+id/buttonDeathImminent"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/hev_button_bg"
+            android:padding="16dp"
+            android:text="DEATH IMMINENT"
+            android:textColor="@color/hev_green"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:typeface="monospace" />
+
+    </LinearLayout>
+
+</LinearLayout>

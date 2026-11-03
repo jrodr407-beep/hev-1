@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.HEVSuit" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/hev_green</item>
+        <item name="colorPrimaryDark">@color/hev_green_dark</item>
+        <item name="colorAccent">@color/hev_green</item>
+        <item name="android:windowBackground">@color/hev_background</item>
+        <item name="android:textColor">@color/hev_green</item>
+    </style>
+</resources>
