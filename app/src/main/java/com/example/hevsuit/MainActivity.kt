@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
 
     private var mediaPlayer: MediaPlayer? = null
+    private var clickPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,26 +51,51 @@ class MainActivity : AppCompatActivity() {
 
         // Button 1
         findViewById<Button>(R.id.buttonMarkIV).setOnClickListener {
-            playAudio(R.raw.hev_mark_iv)
-            vibrate()
+            playClickThenAudio(R.raw.hev_mark_iv)
         }
 
         // Button 2
         findViewById<Button>(R.id.buttonLacerations).setOnClickListener {
-            playAudio(R.raw.hev_minor_lacerations_detected)
-            vibrate()
+            playClickThenAudio(R.raw.hev_minor_lacerations_detected)
         }
 
         // Button 3
         findViewById<Button>(R.id.buttonFracture).setOnClickListener {
-            playAudio(R.raw.major_fracture_detected)
-            vibrate()
+            playClickThenAudio(R.raw.major_fracture_detected)
         }
 
         // Button 4
         findViewById<Button>(R.id.buttonDeathImminent).setOnClickListener {
-            playAudio(R.raw.half_life_hev_user_death_imminent)
-            vibrate()
+            playClickThenAudio(R.raw.half_life_hev_user_death_imminent)
+        }
+    }
+
+    private fun playClickThenAudio(resourceId: Int) {
+        // Release any existing MediaPlayers
+        mediaPlayer?.release()
+        clickPlayer?.release()
+
+        // Play click sound first
+        clickPlayer = MediaPlayer.create(this, R.raw.click)
+        clickPlayer?.start()
+
+        // When click finishes, play the actual audio with SOS vibration
+        clickPlayer?.setOnCompletionListener {
+            it.release()
+            clickPlayer = null
+
+            // Play actual audio
+            mediaPlayer = MediaPlayer.create(this, resourceId)
+            mediaPlayer?.start()
+
+            // Vibrate SOS pattern during audio playback
+            vibrateSOS()
+
+            // Set completion listener to release resources
+            mediaPlayer?.setOnCompletionListener {
+                it.release()
+                mediaPlayer = null
+            }
         }
     }
 
@@ -85,6 +111,48 @@ class MainActivity : AppCompatActivity() {
         mediaPlayer?.setOnCompletionListener {
             it.release()
             mediaPlayer = null
+        }
+    }
+
+    private fun vibrateSOS() {
+        vibrator?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // SOS pattern: ... --- ... (short-short-short, long-long-long, short-short-short)
+                // Morse code: dot=1 unit, dash=3 units, gap=1 unit, letter gap=3 units
+                val timings = longArrayOf(
+                    0,    // start immediately
+                    100,  // S - first dot (1 unit)
+                    100,  // gap (1 unit)
+                    100,  // S - second dot (1 unit)
+                    100,  // gap (1 unit)
+                    100,  // S - third dot (1 unit)
+                    300,  // letter gap (3 units)
+                    300,  // O - first dash (3 units)
+                    100,  // gap (1 unit)
+                    300,  // O - second dash (3 units)
+                    100,  // gap (1 unit)
+                    300,  // O - third dash (3 units)
+                    300,  // letter gap (3 units)
+                    100,  // S - first dot (1 unit)
+                    100,  // gap (1 unit)
+                    100,  // S - second dot (1 unit)
+                    100,  // gap (1 unit)
+                    100   // S - third dot (1 unit)
+                )
+                val amplitudes = intArrayOf(
+                    0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255
+                )
+                it.vibrate(VibrationEffect.createWaveform(timings, amplitudes, -1))
+            } else {
+                @Suppress("DEPRECATION")
+                // SOS pattern: ... --- ...
+                val pattern = longArrayOf(
+                    0, 100, 100, 100, 100, 100, 300,  // S and letter gap
+                    300, 100, 300, 100, 300, 300,       // O and letter gap
+                    100, 100, 100, 100, 100             // S
+                )
+                it.vibrate(pattern, -1)
+            }
         }
     }
 
@@ -118,9 +186,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        // Release MediaPlayer when activity is paused
+        // Release MediaPlayers when activity is paused
         mediaPlayer?.release()
         mediaPlayer = null
+        clickPlayer?.release()
+        clickPlayer = null
     }
 
     override fun onDestroy() {
@@ -128,6 +198,8 @@ class MainActivity : AppCompatActivity() {
         // Release resources
         mediaPlayer?.release()
         mediaPlayer = null
+        clickPlayer?.release()
+        clickPlayer = null
         vibrator = null
     }
 }
