@@ -6,14 +6,11 @@
     android:background="@color/hev_background"
     tools:context=".MainActivity">
 
-    <!-- HEV Suit Background Image -->
-    <ImageView
-        android:id="@+id/hevSuitImage"
+    <!-- 3D Model WebView -->
+    <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/neon_orange_lambda_armor_blueprint"
-        android:contentDescription="HEV Suit" />
+        android:layout_height="match_parent" />
 
     <!-- Toggle Button -->
     <Button

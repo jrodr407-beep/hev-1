@@ -7,15 +7,12 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
-    <!-- Left Panel: HEV Suit Image -->
-    <ImageView
-        android:id="@+id/hevSuitImage"
+    <!-- Left Panel: 3D Model WebView -->
+    <WebView
+        android:id="@+id/webView"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:scaleType="centerCrop"
-        android:src="@drawable/neon_orange_lambda_armor_blueprint"
-        android:contentDescription="HEV Suit" />
+        android:layout_weight="1" />
 
     <!-- Right Panel: Buttons -->
     <LinearLayout
