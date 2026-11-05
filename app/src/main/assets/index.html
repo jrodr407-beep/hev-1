@@ -24,11 +24,12 @@
             color: #FF6600;
             font-family: monospace;
             font-size: 18px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div id="loading">Loading HEV Suit...</div>
+    <div id="loading">Loading HEV Suit...<br><small>Check console for errors</small></div>
     <div id="info">Tap suit parts to inspect & play sounds</div>
     <script type="importmap">
         {
@@ -53,6 +54,8 @@
         animate();
 
         function init() {
+            console.log('Initializing 3D viewer...');
+
             const container = document.createElement('div');
             document.body.appendChild(container);
 
@@ -65,49 +68,16 @@
             scene.background = new THREE.Color(0x110600);
 
             // Lights
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
             scene.add(ambientLight);
 
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
             directionalLight.position.set(5, 10, 7.5);
             scene.add(directionalLight);
 
-            const backLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            const backLight = new THREE.DirectionalLight(0xffffff, 0.8);
             backLight.position.set(-5, 5, -5);
             scene.add(backLight);
-
-            // Load GLB model
-            const loader = new GLTFLoader();
-            loader.load('hev_suit.glb', function (gltf) {
-                model = gltf.scene;
-                scene.add(model);
-
-                // Auto-scale model to fit in view
-                const box = new THREE.Box3().setFromObject(model);
-                const size = box.getSize(new THREE.Vector3());
-                const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 2.5 / maxDim;
-                model.scale.setScalar(scale);
-
-                // Center model
-                const center = box.getCenter(new THREE.Vector3());
-                model.position.sub(center.multiplyScalar(scale));
-
-                // Enable raycasting on all meshes
-                model.traverse(function (child) {
-                    if (child.isMesh) {
-                        child.castShadow = true;
-                        child.receiveShadow = true;
-                    }
-                });
-
-                // Hide loading text
-                document.getElementById('loading').style.display = 'none';
-
-            }, undefined, function (error) {
-                console.error('Error loading model:', error);
-                document.getElementById('loading').textContent = 'Error loading model';
-            });
 
             // Renderer
             renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -115,6 +85,53 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
+
+            console.log('Loading GLB model from: hev_suit.glb');
+
+            // Load GLB model
+            const loader = new GLTFLoader();
+            loader.load('hev_suit.glb',
+                function (gltf) {
+                    console.log('Model loaded successfully');
+                    model = gltf.scene;
+                    scene.add(model);
+
+                    // Auto-scale model to fit in view
+                    const box = new THREE.Box3().setFromObject(model);
+                    const size = box.getSize(new THREE.Vector3());
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const scale = 2.5 / maxDim;
+                    model.scale.setScalar(scale);
+
+                    // Center model
+                    const center = box.getCenter(new THREE.Vector3());
+                    model.position.sub(center.multiplyScalar(scale));
+
+                    // Enable raycasting on all meshes
+                    model.traverse(function (child) {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                            console.log('Found mesh:', child.name);
+                        }
+                    });
+
+                    // Hide loading text
+                    document.getElementById('loading').style.display = 'none';
+
+                },
+                function (xhr) {
+                    if (xhr.lengthComputable) {
+                        const percent = (xhr.loaded / xhr.total * 100).toFixed(0);
+                        console.log('Loading progress:', percent + '%');
+                        document.getElementById('loading').innerHTML = 'Loading HEV Suit...<br>' + percent + '%';
+                    }
+                },
+                function (error) {
+                    console.error('Error loading model:', error);
+                    document.getElementById('loading').innerHTML = 'Error loading model<br><small>Check console for details</small>';
+                }
+            );
 
             // Controls - initially disabled
             controls = new OrbitControls(camera, renderer.domElement);
@@ -147,6 +164,8 @@
             if (intersects.length > 0) {
                 const clickedPart = intersects[0].object;
                 const partName = clickedPart.name || clickedPart.parent?.name || 'unknown';
+
+                console.log('Clicked part:', partName);
 
                 // Enable rotation/zoom when clicking a part
                 canRotate = true;
