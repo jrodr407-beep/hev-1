@@ -16,10 +16,20 @@
             font-size: 14px;
             z-index: 100;
         }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #FF6600;
+            font-family: monospace;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
-    <div id="info">Tap suit parts to play sounds • Drag to rotate • Pinch to zoom</div>
+    <div id="loading">Loading HEV Suit...</div>
+    <div id="info">Tap suit parts to inspect & play sounds</div>
     <script type="importmap">
         {
             "imports": {
@@ -35,6 +45,7 @@
 
         let camera, scene, renderer, controls;
         let model;
+        let canRotate = false;
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
 
@@ -54,12 +65,16 @@
             scene.background = new THREE.Color(0x110600);
 
             // Lights
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
             scene.add(ambientLight);
 
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
             directionalLight.position.set(5, 10, 7.5);
             scene.add(directionalLight);
+
+            const backLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            backLight.position.set(-5, 5, -5);
+            scene.add(backLight);
 
             // Load GLB model
             const loader = new GLTFLoader();
@@ -71,7 +86,7 @@
                 const box = new THREE.Box3().setFromObject(model);
                 const size = box.getSize(new THREE.Vector3());
                 const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 2 / maxDim;
+                const scale = 2.5 / maxDim;
                 model.scale.setScalar(scale);
 
                 // Center model
@@ -86,8 +101,12 @@
                     }
                 });
 
+                // Hide loading text
+                document.getElementById('loading').style.display = 'none';
+
             }, undefined, function (error) {
                 console.error('Error loading model:', error);
+                document.getElementById('loading').textContent = 'Error loading model';
             });
 
             // Renderer
@@ -97,12 +116,13 @@
             renderer.shadowMap.enabled = true;
             container.appendChild(renderer.domElement);
 
-            // Controls
+            // Controls - initially disabled
             controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.minDistance = 1;
             controls.maxDistance = 10;
+            controls.enabled = false; // Initially disabled
 
             // Events
             window.addEventListener('resize', onWindowResize);
@@ -128,16 +148,28 @@
                 const clickedPart = intersects[0].object;
                 const partName = clickedPart.name || clickedPart.parent?.name || 'unknown';
 
+                // Enable rotation/zoom when clicking a part
+                canRotate = true;
+                controls.enabled = true;
+
                 // Send click event to Android
                 if (window.AndroidInterface) {
                     window.AndroidInterface.onModelPartClicked(partName);
                 }
+
+                // Disable rotation after 5 seconds
+                setTimeout(() => {
+                    canRotate = false;
+                    controls.enabled = false;
+                }, 5000);
             }
         }
 
         function animate() {
             requestAnimationFrame(animate);
-            controls.update();
+            if (canRotate) {
+                controls.update();
+            }
             renderer.render(scene, camera);
         }
     </script>
