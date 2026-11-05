@@ -1,6 +1,5 @@
 package com.example.hevsuit
 
-import android.animation.AlphaAnimation
 import android.animation.ObjectAnimator
 import android.media.MediaPlayer
 import android.os.Build
