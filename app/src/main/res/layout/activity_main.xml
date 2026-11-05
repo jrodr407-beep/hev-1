@@ -6,9 +6,9 @@
     android:background="@color/hev_background"
     tools:context=".MainActivity">
 
-    <!-- 3D Model WebView -->
-    <WebView
-        android:id="@+id/webView"
+    <!-- 3D Model Viewer -->
+    <com.google.android.filament.android.viewer.ModelViewer
+        android:id="@+id/modelViewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

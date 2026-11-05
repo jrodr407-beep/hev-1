@@ -7,9 +7,9 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
-    <!-- Left Panel: 3D Model WebView -->
-    <WebView
-        android:id="@+id/webView"
+    <!-- Left Panel: 3D Model Viewer -->
+    <com.google.android.filament.android.viewer.ModelViewer
+        android:id="@+id/modelViewer"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />

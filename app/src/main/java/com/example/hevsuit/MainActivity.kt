@@ -1,6 +1,5 @@
 package com.example.hevsuit
 
-import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -8,21 +7,17 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.view.View
-import android.webkit.JavascriptInterface
-import android.webkit.WebChromeClient
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.filament.android.viewer.ModelViewer
 
 class MainActivity : AppCompatActivity() {
 
     private var mediaPlayer: MediaPlayer? = null
     private var clickPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
-    private lateinit var webView: WebView
+    private lateinit var modelViewer: ModelViewer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,52 +32,19 @@ class MainActivity : AppCompatActivity() {
             getSystemService(VIBRATOR_SERVICE) as Vibrator
         }
 
-        // Setup WebView for 3D model
-        setupWebView()
+        // Setup ModelViewer for 3D model
+        setupModelViewer()
 
         // Set up button click listeners
         setupButtons()
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
-    private fun setupWebView() {
-        webView = findViewById(R.id.webView)
-        webView.settings.apply {
-            javaScriptEnabled = true
-            domStorageEnabled = true
-            allowFileAccess = true
-            allowContentAccess = true
-            allowFileAccessFromFileURLs = true
-            allowUniversalAccessFromFileURLs = true
-        }
-
-        webView.webChromeClient = WebChromeClient()
-        webView.webViewClient = WebViewClient()
-
-        // Add JavaScript interface for communication
-        webView.addJavascriptInterface(WebAppInterface(), "AndroidInterface")
-
-        // Load the 3D viewer
-        webView.loadUrl("file:///android_asset/index.html")
-    }
-
-    inner class WebAppInterface {
-        @JavascriptInterface
-        fun onModelPartClicked(partName: String) {
-            // Handle click on 3D model part
-            // For now, play random sound - you can customize based on partName
-            when {
-                partName.contains("leg", ignoreCase = true) -> {
-                    playClickThenAudio(R.raw.hev_minor_lacerations_detected)
-                }
-                partName.contains("torso", ignoreCase = true) -> {
-                    playClickThenAudio(R.raw.major_fracture_detected)
-                }
-                else -> {
-                    playClickThenAudio(R.raw.hev_mark_iv)
-                }
-            }
-        }
+    private fun setupModelViewer() {
+        modelViewer = findViewById(R.id.modelViewer)
+        modelViewer.loadModel("hev_suit.glb")
+        modelViewer.setRenderQuality(ModelViewer.RenderQuality.HIGH)
+        modelViewer.setTransformToUnitCube()
+        modelViewer.setTouchRotation(true, 0.0f, 0.0f) // Initially disabled
     }
 
     private fun setupButtons() {
@@ -93,8 +55,12 @@ class MainActivity : AppCompatActivity() {
                 val buttonPanel = findViewById<LinearLayout>(R.id.buttonPanel)
                 if (buttonPanel.visibility == View.VISIBLE) {
                     buttonPanel.visibility = View.GONE
+                    // Disable rotation when hiding buttons
+                    modelViewer.setTouchRotation(false, 0.0f, 0.0f)
                 } else {
                     buttonPanel.visibility = View.VISIBLE
+                    // Enable rotation when showing buttons
+                    modelViewer.setTouchRotation(true, 0.0f, 0.0f)
                 }
                 vibrateShort()
             }
