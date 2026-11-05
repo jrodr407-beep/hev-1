@@ -1,8 +1,12 @@
 package com.example.hevsuit
 
+import android.animation.AlphaAnimation
+import android.animation.ObjectAnimator
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -10,14 +14,12 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.filament.android.viewer.ModelViewer
 
 class MainActivity : AppCompatActivity() {
 
     private var mediaPlayer: MediaPlayer? = null
     private var clickPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
-    private lateinit var modelViewer: ModelViewer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,19 +34,8 @@ class MainActivity : AppCompatActivity() {
             getSystemService(VIBRATOR_SERVICE) as Vibrator
         }
 
-        // Setup ModelViewer for 3D model
-        setupModelViewer()
-
         // Set up button click listeners
         setupButtons()
-    }
-
-    private fun setupModelViewer() {
-        modelViewer = findViewById(R.id.modelViewer)
-        modelViewer.loadModel("hev_suit.glb")
-        modelViewer.setRenderQuality(ModelViewer.RenderQuality.HIGH)
-        modelViewer.setTransformToUnitCube()
-        modelViewer.setTouchRotation(true, 0.0f, 0.0f) // Initially disabled
     }
 
     private fun setupButtons() {
@@ -55,12 +46,8 @@ class MainActivity : AppCompatActivity() {
                 val buttonPanel = findViewById<LinearLayout>(R.id.buttonPanel)
                 if (buttonPanel.visibility == View.VISIBLE) {
                     buttonPanel.visibility = View.GONE
-                    // Disable rotation when hiding buttons
-                    modelViewer.setTouchRotation(false, 0.0f, 0.0f)
                 } else {
                     buttonPanel.visibility = View.VISIBLE
-                    // Enable rotation when showing buttons
-                    modelViewer.setTouchRotation(true, 0.0f, 0.0f)
                 }
                 vibrateShort()
             }
@@ -69,22 +56,42 @@ class MainActivity : AppCompatActivity() {
         // Button 1
         findViewById<Button>(R.id.buttonMarkIV).setOnClickListener {
             playClickThenAudio(R.raw.hev_mark_iv)
+            flashRed()
         }
 
         // Button 2
         findViewById<Button>(R.id.buttonLacerations).setOnClickListener {
             playClickThenAudio(R.raw.hev_minor_lacerations_detected)
+            flashRed()
         }
 
         // Button 3
         findViewById<Button>(R.id.buttonFracture).setOnClickListener {
             playClickThenAudio(R.raw.major_fracture_detected)
+            flashRed()
         }
 
         // Button 4
         findViewById<Button>(R.id.buttonDeathImminent).setOnClickListener {
             playClickThenAudio(R.raw.half_life_hev_user_death_imminent)
+            flashRed()
         }
+    }
+
+    private fun flashRed() {
+        val redFlash = findViewById<View>(R.id.redFlash)
+        redFlash.visibility = View.VISIBLE
+
+        // Fade out animation
+        val fadeOut = ObjectAnimator.ofFloat(redFlash, "alpha", 0.8f, 0f)
+        fadeOut.duration = 300
+        fadeOut.start()
+
+        // Hide after animation
+        Handler(Looper.getMainLooper()).postDelayed({
+            redFlash.visibility = View.GONE
+            redFlash.alpha = 0.8f
+        }, 300)
     }
 
     private fun playClickThenAudio(resourceId: Int) {

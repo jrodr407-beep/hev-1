@@ -6,11 +6,22 @@
     android:background="@color/hev_background"
     tools:context=".MainActivity">
 
-    <!-- 3D Model Viewer -->
-    <com.google.android.filament.android.viewer.ModelViewer
-        android:id="@+id/modelViewer"
+    <!-- HEV Suit Background Image -->
+    <ImageView
+        android:id="@+id/hevSuitImage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/neon_orange_lambda_armor_blueprint"
+        android:contentDescription="HEV Suit" />
+
+    <!-- Red Flash Overlay -->
+    <View
+        android:id="@+id/redFlash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CCFF0000"
+        android:visibility="gone" />
 
     <!-- Toggle Button -->
     <Button
