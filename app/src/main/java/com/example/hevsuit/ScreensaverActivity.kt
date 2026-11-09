@@ -14,8 +14,13 @@ import java.util.Locale
 class ScreensaverActivity : AppCompatActivity() {
 
     private lateinit var timeDisplay: TextView
-    private lateinit var handler: Handler
-    private lateinit var timeRunnable: Runnable
+    private val handler = Handler(Looper.getMainLooper())
+    private val timeRunnable = object : Runnable {
+        override fun run() {
+            updateTime()
+            handler.postDelayed(this, 1000)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,14 +34,7 @@ class ScreensaverActivity : AppCompatActivity() {
             finish()
         }
 
-        // Update time every second
-        handler = Handler(Looper.getMainLooper())
-        timeRunnable = object : Runnable {
-            override fun run() {
-                updateTime()
-                handler.postDelayed(this, 1000)
-            }
-        }
+        // Start time updates
         handler.post(timeRunnable)
     }
 
@@ -47,6 +45,6 @@ class ScreensaverActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(timeRunnable as Runnable)
+        handler.removeCallbacks(timeRunnable)
     }
 }
