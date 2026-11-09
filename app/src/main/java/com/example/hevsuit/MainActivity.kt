@@ -1,6 +1,7 @@
 package com.example.hevsuit
 
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -11,14 +12,15 @@ import android.os.Vibrator
 import android.os.VibratorManager
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 
     private var mediaPlayer: MediaPlayer? = null
-    private var clickPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
+    private var isHelmetView = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
+        // Screensaver button
+        findViewById<Button>(R.id.screensaverButton).setOnClickListener {
+            startActivity(Intent(this, ScreensaverActivity::class.java))
+        }
+
         // Toggle button (only in portrait mode)
         val toggleButton = findViewById<Button>(R.id.toggleButton)
         if (toggleButton.visibility != View.GONE) {
@@ -54,26 +61,54 @@ class MainActivity : AppCompatActivity() {
 
         // Button 1
         findViewById<Button>(R.id.buttonMarkIV).setOnClickListener {
-            playClickThenAudio(R.raw.hev_mark_iv)
+            playAudio(R.raw.hev_mark_iv)
+            vibrateSOS()
             flashRed()
         }
 
         // Button 2
         findViewById<Button>(R.id.buttonLacerations).setOnClickListener {
-            playClickThenAudio(R.raw.hev_minor_lacerations_detected)
+            playAudio(R.raw.hev_minor_lacerations_detected)
+            vibrateSOS()
             flashRed()
         }
 
         // Button 3
         findViewById<Button>(R.id.buttonFracture).setOnClickListener {
-            playClickThenAudio(R.raw.major_fracture_detected)
+            playAudio(R.raw.major_fracture_detected)
+            vibrateSOS()
             flashRed()
         }
 
         // Button 4
         findViewById<Button>(R.id.buttonDeathImminent).setOnClickListener {
-            playClickThenAudio(R.raw.half_life_hev_user_death_imminent)
+            playAudio(R.raw.half_life_hev_user_death_imminent)
+            vibrateSOS()
             flashRed()
+        }
+
+        // Button 5 - Beep beep beep
+        findViewById<Button>(R.id.buttonBeep).setOnClickListener {
+            playAudio(R.raw.hev_suit_beep_beep_beep)
+            vibrateSOS()
+            flashRed()
+        }
+
+        // View toggle button
+        findViewById<Button>(R.id.viewToggle).setOnClickListener {
+            toggleView()
+            vibrateShort()
+        }
+    }
+
+    private fun toggleView() {
+        val suitImage = findViewById<ImageView>(R.id.hevSuitImage)
+        isHelmetView = !isHelmetView
+
+        if (isHelmetView) {
+            suitImage.setImageResource(R.drawable.hev_helm)
+        } else {
+            suitImage.setImageResource(R.drawable.neon_orange_lambda_armor_blueprint)
         }
     }
 
@@ -91,35 +126,6 @@ class MainActivity : AppCompatActivity() {
             redFlash.visibility = View.GONE
             redFlash.alpha = 0.8f
         }, 300)
-    }
-
-    private fun playClickThenAudio(resourceId: Int) {
-        // Release any existing MediaPlayers
-        mediaPlayer?.release()
-        clickPlayer?.release()
-
-        // Play click sound first
-        clickPlayer = MediaPlayer.create(this, R.raw.click)
-        clickPlayer?.start()
-
-        // When click finishes, play the actual audio with SOS vibration
-        clickPlayer?.setOnCompletionListener {
-            it.release()
-            clickPlayer = null
-
-            // Play actual audio
-            mediaPlayer = MediaPlayer.create(this, resourceId)
-            mediaPlayer?.start()
-
-            // Vibrate SOS pattern during audio playback
-            vibrateSOS()
-
-            // Set completion listener to release resources
-            mediaPlayer?.setOnCompletionListener {
-                it.release()
-                mediaPlayer = null
-            }
-        }
     }
 
     private fun playAudio(resourceId: Int) {
@@ -209,11 +215,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        // Release MediaPlayers when activity is paused
+        // Release MediaPlayer when activity is paused
         mediaPlayer?.release()
         mediaPlayer = null
-        clickPlayer?.release()
-        clickPlayer = null
     }
 
     override fun onDestroy() {
@@ -221,8 +225,6 @@ class MainActivity : AppCompatActivity() {
         // Release resources
         mediaPlayer?.release()
         mediaPlayer = null
-        clickPlayer?.release()
-        clickPlayer = null
         vibrator = null
     }
 }

@@ -23,6 +23,22 @@
         android:background="#CCFF0000"
         android:visibility="gone" />
 
+    <!-- Screensaver Button -->
+    <Button
+        android:id="@+id/screensaverButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:background="@drawable/hev_button_bg"
+        android:padding="12dp"
+        android:text="SCREENSAVER"
+        android:textColor="@color/hev_green"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:typeface="monospace" />
+
     <!-- Toggle Button -->
     <Button
         android:id="@+id/toggleButton"
@@ -52,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:columnCount="2"
-            android:rowCount="2">
+            android:rowCount="3">
 
             <!-- Button 1 -->
             <Button
@@ -107,6 +123,34 @@
                 android:text="4"
                 android:textColor="@color/hev_green"
                 android:textSize="24sp"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+            <!-- Button 5 -->
+            <Button
+                android:id="@+id/buttonBeep"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="4dp"
+                android:background="@drawable/hev_button_bg"
+                android:padding="8dp"
+                android:text="5"
+                android:textColor="@color/hev_green"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:typeface="monospace" />
+
+            <!-- View Toggle Button -->
+            <Button
+                android:id="@+id/viewToggle"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="4dp"
+                android:background="@drawable/hev_button_bg"
+                android:padding="8dp"
+                android:text="HELM"
+                android:textColor="@color/hev_green"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 android:typeface="monospace" />
 
