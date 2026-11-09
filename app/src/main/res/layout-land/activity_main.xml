@@ -27,20 +27,6 @@
         android:gravity="center"
         android:padding="24dp">
 
-        <!-- Screensaver Button -->
-        <Button
-            android:id="@+id/screensaverButton"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_margin="8dp"
-            android:background="@drawable/hev_button_bg"
-            android:padding="12dp"
-            android:text="SCREENSAVER"
-            android:textColor="@color/hev_green"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:typeface="monospace" />
-
         <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

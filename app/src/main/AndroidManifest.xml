@@ -27,10 +27,6 @@
             android:name=".MainActivity"
             android:exported="false"
             android:screenOrientation="unspecified" />
-        <activity
-            android:name=".ScreensaverActivity"
-            android:exported="false"
-            android:screenOrientation="unspecified" />
     </application>
 
 </manifest>

@@ -1,12 +1,9 @@
 package com.example.hevsuit
 
 import android.animation.ObjectAnimator
-import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -40,11 +37,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupButtons() {
-        // Screensaver button
-        findViewById<Button>(R.id.screensaverButton).setOnClickListener {
-            startActivity(Intent(this, ScreensaverActivity::class.java))
-        }
-
         // Toggle button (only in portrait mode)
         val toggleButton = findViewById<Button>(R.id.toggleButton)
         if (toggleButton.visibility != View.GONE) {

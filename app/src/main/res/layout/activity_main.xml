@@ -23,22 +23,6 @@
         android:background="#CCFF0000"
         android:visibility="gone" />
 
-    <!-- Screensaver Button -->
-    <Button
-        android:id="@+id/screensaverButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="16dp"
-        android:background="@drawable/hev_button_bg"
-        android:padding="12dp"
-        android:text="SCREENSAVER"
-        android:textColor="@color/hev_green"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:typeface="monospace" />
-
     <!-- Toggle Button -->
     <Button
         android:id="@+id/toggleButton"
