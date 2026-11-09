@@ -45,6 +45,6 @@ class ScreensaverActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handler.removeCallbacks(timeRunnable)
+        handler.removeCallbacksAndMessages(null)
     }
 }
